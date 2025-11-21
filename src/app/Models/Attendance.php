@@ -19,4 +19,4 @@ class Attendance extends Model
     {
         return $this->hasMany(BreakTime::class);
     }
-}
+}   

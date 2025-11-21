@@ -102,4 +102,45 @@ class AttendanceController extends Controller
             ->where('date', Carbon::today()->toDateString())
             ->firstOrFail();
     }
+
+
+
+    public function list($year = null, $month = null)
+    {
+    // 初期表示：今月
+    if (!$year || !$month) {
+        $year = now()->year;
+        $month = now()->month;
+    }
+
+    // 月初と月末
+    $start = "{$year}-{$month}-01";
+    $end   = date("Y-m-t", strtotime($start));  // 月末
+
+    // ログインユーザーの勤怠データを月単位で取得
+    $attendances = Attendance::where('user_id', auth()->id())
+        ->whereBetween('date', [$start, $end])
+        ->orderBy('date', 'asc')
+        ->get();
+
+    return view('attendance.list', [
+        'attendances' => $attendances,
+        'year' => $year,
+        'month' => $month,
+        'prevYear' => date("Y", strtotime("-1 month", strtotime($start))),
+        'prevMonth' => date("m", strtotime("-1 month", strtotime($start))),
+        'nextYear' => date("Y", strtotime("+1 month", strtotime($start))),
+        'nextMonth' => date("m", strtotime("+1 month", strtotime($start))),
+    ]);
+    }
+
+    public function detail($date)
+    {
+    $attendance = Attendance::where('user_id', auth()->id())
+        ->where('date', $date)
+        ->firstOrFail();
+
+    return view('attendance.detail', compact('attendance'));
+    }
+
 }

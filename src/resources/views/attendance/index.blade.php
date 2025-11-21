@@ -13,40 +13,42 @@
     @if (session('message'))
         <div class="alert alert-success">{{ session('message') }}</div>
     @endif
+
     @if (session('error'))
         <div class="alert alert-danger">{{ session('error') }}</div>
     @endif
 
     {{-- 出勤 --}}
-    @if($attendance->status === '勤務外')
-        <form action="/attendance/clock-in" method="POST">
+    @if ($attendance->status === '勤務外')
+        <form action="{{ route('attendance.clockIn') }}" method="POST">
             @csrf
             <button class="btn btn-primary">出勤</button>
         </form>
     @endif
 
-    {{-- 休憩入 --}}
-    @if($attendance->status === '出勤中')
-        <form action="/attendance/break-start" method="POST" class="mt-2">
+    {{-- 休憩開始 --}}
+    @if ($attendance->status === '出勤中')
+        <form action="{{ route('attendance.breakStart') }}" method="POST" class="mt-2">
             @csrf
-            <button class="btn btn-warning">休憩入</button>
+            <button class="btn btn-warning">休憩開始</button>
         </form>
     @endif
 
-    {{-- 休憩戻 --}}
-    @if($attendance->status === '休憩中')
-        <form action="/attendance/break-end" method="POST" class="mt-2">
+    {{-- 休憩終了 --}}
+    @if ($attendance->status === '休憩中')
+        <form action="{{ route('attendance.breakEnd') }}" method="POST" class="mt-2">
             @csrf
-            <button class="btn btn-success">休憩戻</button>
+            <button class="btn btn-success">休憩終了</button>
         </form>
     @endif
 
     {{-- 退勤 --}}
-    @if($attendance->status === '出勤中')
-        <form action="/attendance/clock-out" method="POST" class="mt-2">
+    @if ($attendance->status === '出勤中')
+        <form action="{{ route('attendance.clockOut') }}" method="POST" class="mt-2">
             @csrf
             <button class="btn btn-danger">退勤</button>
         </form>
     @endif
+
 </div>
 @endsection

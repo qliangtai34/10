@@ -30,7 +30,8 @@ Route::get('/login', function () {
 | 勤怠管理（認証必須）
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth'])->group(function () 
+{
 
     Route::get('/attendance', [AttendanceController::class, 'index'])
         ->name('attendance.index');
@@ -46,4 +47,12 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/attendance/clock-out', [AttendanceController::class, 'clockOut'])
         ->name('attendance.clockOut');
+
+
+
+    Route::get('/attendance/list', [AttendanceController::class, 'list'])->name('attendance.list');
+    Route::get('/attendance/list/{year}/{month}', [AttendanceController::class, 'list'])->name('attendance.list.month');
+
+    // 詳細画面
+    Route::get('/attendance/detail/{date}', [AttendanceController::class, 'detail'])->name('attendance.detail');    
 });
